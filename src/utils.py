@@ -114,7 +114,6 @@ def initialize_database():
         """)
         
         # AQI Summary table (for Operation 3)
-            # aqi_category VARCHAR(50) NOT NULL,
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS aqi_summary (
             id SERIAL PRIMARY KEY,

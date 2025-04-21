@@ -259,25 +259,7 @@ class SparkStreamingConsumer:
             
             # --- OPERATION 3: Categorize Air Quality and Calculate City Averages ---
             # Define a UDF to categorize AQI values
-            @udf(StringType())
-            def categorize_aqi(aqi):
-                logger.warning(f"UDF input aqi: {aqi}, type: {type(aqi)}")
-                if aqi is None:
-                    result = "Unknown"
-                elif aqi == 1:
-                    result = "Good"
-                elif aqi == 2:
-                    result = "Fair"
-                elif aqi == 3:
-                    result = "Moderate"
-                elif aqi == 4:
-                    result = "Poor"
-                elif aqi == 5:
-                    result = "Very Poor"
-                else:
-                    result = "Hazardous"
-                logger.warning(f"UDF output: {result}")
-                return result
+
             
             # Process air quality data to categorize and calculate city averages
             # .withColumn("aqi_category", categorize_aqi(col("aqi"))) 

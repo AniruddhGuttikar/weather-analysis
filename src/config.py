@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # OpenWeatherMap API settings
-OPENWEATHERMAP_API_KEY = os.getenv("OPENWEATHERMAP_API_KEY", "YOUR_API_KEY")
+OPENWEATHERMAP_API_KEY = os.getenv("OPENWEATHERMAP_API_KEY", "bc7f0434dde7dfdff855cd43cb95bfad")
 WEATHER_API_ENDPOINT = "https://api.openweathermap.org/data/2.5/weather"
 
 # Kafka settings
