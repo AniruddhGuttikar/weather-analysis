@@ -210,9 +210,9 @@ class SparkStreamingConsumer:
             # Process raw weather data to calculate statistics per city in 1-hour windows
             # TODO: update the time back to 1 hour
             weather_stats_df = raw_weather_df \
-                .withWatermark("timestamp", "10 seconds") \
+                .withWatermark("timestamp", "5 minutes") \
                 .groupBy(
-                    window(col("timestamp"), "2 minutes"),
+                    window(col("timestamp"), "15 minutes"),
                     col("city_name")
                 ) \
                 .agg(
@@ -240,9 +240,9 @@ class SparkStreamingConsumer:
             # --- OPERATION 2: Aggregate Alert Counts by Type ---
             # Process weather alerts to count occurrences by type
             alert_counts_df = weather_alerts_df \
-                .withWatermark("timestamp", "10 seconds") \
+                .withWatermark("timestamp", "5 minutes") \
                 .groupBy(
-                    window(col("timestamp"), "2 minutes", "30 seconds"),  # 1-hour sliding window with 30min slide
+                    window(col("timestamp"), "15 minutes", "5 minutes"),  # 1-hour sliding window with 30min slide
                     col("alert_type")
                 ) \
                 .agg(
@@ -265,9 +265,9 @@ class SparkStreamingConsumer:
             # .withColumn("aqi_category", categorize_aqi(col("aqi"))) 
 
             aqi_summary_df = aqi_df \
-                .withWatermark("timestamp", "10 seconds") \
+                .withWatermark("timestamp", "5 minutes") \
                 .groupBy(
-                    window(col("timestamp"), "2 minutes"),
+                    window(col("timestamp"), "15 minutes"),
                     col("city_name"),
                 ) \
                 .agg(

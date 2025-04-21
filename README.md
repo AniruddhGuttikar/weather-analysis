@@ -68,7 +68,7 @@ The system utilizes three Kafka topics:
 
 7. (In a separate terminal) Run the batch processing after some data has been collected:
    ```
-   docker-compose exec weather-app python -m src.batch.spark_batch.py
+   docker-compose exec weather-app python -m src.batch.spark_batch
    ```
 
 ## Components

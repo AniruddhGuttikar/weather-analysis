@@ -95,8 +95,8 @@ class WeatherProducer:
     def check_for_extreme_weather(self, weather_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Check for extreme weather conditions and generate alerts if necessary."""
         alerts = []
-        
-        # Check for extreme temperatures
+
+        # Extreme Heat
         if weather_data['temperature'] > 35:
             alerts.append({
                 'city_name': weather_data['city_name'],
@@ -105,7 +105,8 @@ class WeatherProducer:
                 'temperature': weather_data['temperature'],
                 'timestamp': get_timestamp()
             })
-        
+
+        # Extreme Cold
         elif weather_data['temperature'] < -10:
             alerts.append({
                 'city_name': weather_data['city_name'],
@@ -114,8 +115,49 @@ class WeatherProducer:
                 'temperature': weather_data['temperature'],
                 'timestamp': get_timestamp()
             })
+
+        # High Wind
+        if weather_data.get('wind_speed', 0) > 25:
+            alerts.append({
+                'city_name': weather_data['city_name'],
+                'alert_type': 'high_wind',
+                'alert_message': f"High wind detected in {weather_data['city_name']} with speed {weather_data['wind_speed']:.1f} km/h",
+                'wind_speed': weather_data['wind_speed'],
+                'timestamp': get_timestamp()
+            })
+
+        # High or Low Pressure
+        if weather_data.get('pressure') is not None:
+            if weather_data['pressure'] > 1020:
+                alerts.append({
+                    'city_name': weather_data['city_name'],
+                    'alert_type': 'high_pressure',
+                    'alert_message': f"High pressure detected in {weather_data['city_name']}: {weather_data['pressure']} hPa",
+                    'pressure': weather_data['pressure'],
+                    'timestamp': get_timestamp()
+                })
+            elif weather_data['pressure'] < 980:
+                alerts.append({
+                    'city_name': weather_data['city_name'],
+                    'alert_type': 'low_pressure',
+                    'alert_message': f"Low pressure detected in {weather_data['city_name']}: {weather_data['pressure']} hPa",
+                    'pressure': weather_data['pressure'],
+                    'timestamp': get_timestamp()
+                })
+            
+
+        # Humidity Extremes
+        if weather_data.get('humidity', 50) > 90 or weather_data['humidity'] < 15:
+            alerts.append({
+                'city_name': weather_data['city_name'],
+                'alert_type': 'humidity_extreme',
+                'alert_message': f"Humidity extreme in {weather_data['city_name']}: {weather_data['humidity']}%",
+                'humidity': weather_data['humidity'],
+                'timestamp': get_timestamp()
+            })
+
         return alerts
-    
+
     def fetch_air_quality_data(self, city, lat: float, lon: float) -> Dict[str, Any]:
         """Fetch air quality data for given coordinates from OpenWeatherMap."""
         try:
@@ -186,7 +228,7 @@ class WeatherProducer:
         # Ensure all messages are sent
         self.producer.flush()
 
-    def run(self, interval: int = 30):
+    def run(self, interval: int = 60):
         """Run the producer to continuously fetch and publish weather data."""
         try:
             while True:
