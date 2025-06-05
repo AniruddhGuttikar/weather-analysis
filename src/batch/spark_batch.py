@@ -110,7 +110,7 @@ class SparkBatchProcessor:
         # Apply the same aggregation as in streaming
         weather_stats_df = raw_weather_df \
             .groupBy(
-                window(col("timestamp"), "15 minutes"),
+                window(col("timestamp"), "2 minutes"),
                 col("city_name")
             ) \
             .agg(
@@ -154,7 +154,7 @@ class SparkBatchProcessor:
         # Apply the same aggregation as in streaming
         alert_counts_df = alerts_df \
             .groupBy(
-                window(col("timestamp"), "15 minutes", "5 minutes"),
+                window(col("timestamp"), "2 minutes", "1 minute"),
                 col("alert_type")
             ) \
             .agg(
@@ -188,7 +188,7 @@ class SparkBatchProcessor:
         # Apply the same aggregation as in streaming
         aqi_summary_df = aqi_df \
             .groupBy(
-                window(col("timestamp"), "15 minutes"),
+                window(col("timestamp"), "2 minutes"),
                 col("city_name")
             ) \
             .agg(

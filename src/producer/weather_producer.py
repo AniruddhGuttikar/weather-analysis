@@ -222,13 +222,15 @@ class WeatherProducer:
             # Check for extreme weather and publish alerts
             alerts = self.check_for_extreme_weather(weather_data)
             for alert in alerts:
+                alert_message = f"\033[1;31mWeather alert: {alert['alert_message']}\033[0m"  # Red bold text
+                logger.warning(alert_message)
                 self.producer.send(WEATHER_ALERTS_TOPIC, value=alert)
-                logger.warning(f"Weather alert: {alert['alert_message']}")
+
         
         # Ensure all messages are sent
         self.producer.flush()
 
-    def run(self, interval: int = 60):
+    def run(self, interval: int = 20):
         """Run the producer to continuously fetch and publish weather data."""
         try:
             while True:
